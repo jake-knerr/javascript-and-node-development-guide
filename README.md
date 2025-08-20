@@ -3027,6 +3027,12 @@ function longFunc () {
 }
 ```
 
+#### Avoid creating large number of related and highly quantized files.
+
+In other words, do not create lots of small files that serve a very narrow, related purpose. Combine related small files when possible.
+
+> Why? It becomes very difficult to scan and locate functionality when it is spread out over large numbers of tiny files.
+
 **[⬆ Table of Contents](#toc)**
 
 ---
