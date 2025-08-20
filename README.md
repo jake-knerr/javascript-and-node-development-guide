@@ -26,8 +26,8 @@ Jake Knerr © Ardisia Labs LLC
   - [Identifiers](#identifiers)
   - [Naming Data](#naming-data)
   - [Naming Functions](#naming-functions)
-  - [Naming Files](#naming-files)
-  - [Naming Folders](#naming-folders)
+  - [File Names](#file-names)
+  - [Naming Files and Folders - Path Normalization](#naming-files-and-folders---path-normalization)
 - [Storybook Design, Code Order](#storybook-design-code-order)
 - [Code as Documentation](#code-as-documentation)
 - [JavaScript Features](#javascript-features)
@@ -464,7 +464,7 @@ export authUtils = {
 }
 ```
 
-### Naming Files
+### File Names
 
 #### Filenames are nounal.
 
@@ -496,6 +496,8 @@ The only exception is `index.html` due to how web servers handle such files.
 
 > Why? It is easier to track named files in an IDE, and named files are more descriptive than _index_. It is easy to get confused with a sea of `index` files in your IDE tabs.
 
+> Discussion: `index` files are useful for creating an API for the functionality in the folder, but I don't think the payoff is worth the complexity.
+
 ```
 /* discouraged */
 /utils/math/index.js
@@ -504,79 +506,62 @@ The only exception is `index.html` due to how web servers handle such files.
 utils/math/math-utils.js;
 ```
 
-#### A file's purpose should be clear from the filename alone, and a filename should be able to resolve any ambiguity that may arise from files with similar purposes in different folders.
+### Naming Files and Folders - Path Normalization
 
-A reader should not have to open the file to determine its purpose.
+#### A file's purpose should be described by its parent folder(s), the file name, and the file extension.
 
-> Why? Since filenames in IDE tabs do not display the additional context of the folders that contain the file or the code within the file, a filename should allow the reader to easily identify the file's purpose.
+Put related files in folders to shorten their file names because they share the context provided by the parent folder. Thus, reducing the overall number of characters used to describe the paths of the files.
 
-```
-/* avoid */
-/client
-  /auth.js
-/server
-  /auth.js
+This is path normalization.
 
-/* good */
-/client
-  client-auth.js
-/server
-  server-auth.js
-```
-
-#### A file's extension is a part of the filename and may provide additional context.
-
-For example, a `*.js` file tells the reader the file is a JavaScript file, and adding "js" to the name is unnecessary. `*.js` already carries the context of a "js" file.
+> Why? A reader should not have to open the file to determine its purpose.
 
 ```
+/* discouraged */
+/home-page.ejs
+/contact-page.ejs
+
+/* preferred */
+/pages
+  /home.ejs
+  /contact.ejs
+
 /* avoid - ejs files are templates */
-profile-page-template.ejs
+profile-template.ejs
 
 /* good */
-profile-page.ejs
+profile.ejs
 ```
 
-#### Preferred steps to name a file:
+#### Prefer folder names that minimize the total path length for all of the files. This should help decide what folders to create.
 
-- **(1) Start by writing all of the file's parent folder names.**
-- **(2) Append a short as possible name (if necessary) that makes the file's purpose clear from the name alone and minimizes collision risk.**
-- **(3) Examine the folders in the file name: drop all the folders' names where the file's identity is still clear without it and there is a low risk of collisions.**
-
-Sometimes, this system may cause outer folders to be removed, sometimes the inner folders. Files in the same folder tend to have the same folder-prefix. This makes scanning the files easy.
-
-> Note, changing plural folder names to singular names and vice-versa is fine. For example, `/services/services-utils` to `services//service-utils.js` is fine. Do whatever makes sense.
-
-> Note, the risk of name collision involves many factors. Perhaps two files with the same name operate in totally different domains and it would be very unusual for one to be working on both at the same time. In such a case, having the same name is not a problem.
+Basically, prefer efficient folder names.
 
 ```
-/controllers
-  /controllers-subject.js # prefix required
-  /controllers-utils.js # prefix required
-  /subject/
-    /controllers-subject-utils # prefixes required
+/* discouraged */
+/database
+  /database-queries
+    /sql-queries.js
 
-/icons
-  /thumbs-up.svg # prefix not required; thumbs-up.svg has low risk of collision
+/* preferred */
+/database
+  /queries
+    /sql.js
 ```
 
-### Naming Folders
+#### Single file folders are allowed.
 
-#### Folders can have shorter names than files.
+Alternatively, having a longer filename is fine instead of a single folder file..
 
-> Why? Because folders are viewed in a tree hierarchy. Tree hierarchies provide additional naming context.
+> Why use a single file folder? Perhaps you expect to add more files in the future or a folder is consistent with the structure of the parent folder.
 
 ```
+/* acceptable */
+/views
+  /contact.ejs
 
-/* avoid - no need to prepend `client-` to `db` */
-/client
-  /client-db/
-    db-client.js
-
-/* good */
-/client
-  /db/
-    db-client.js
-
+/* also acceptable */
+/contact-view.ejs
 ```
 
 **[⬆ Table of Contents](#toc)**
