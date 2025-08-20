@@ -3132,7 +3132,8 @@ Sub-folders within each technical category folder can be created to serve path n
     - All exported functions use `validateXXX` as a naming scheme.
     - They validate the shape of data so typically there are no hits to the database or services.
     - For errors, either throw `400`|`500` for tampering, or errors in an array on the `Request` object for handling by other controllers.
-- /data - All exported functions use simple CRUD prefix names like `readData`, `updateData`, etc. Data functions are "dumb". The services are smart.
+- /data
+  - All exported functions use simple CRUD prefix names like `readData`, `updateData`, etc. Data functions are "dumb". The services are smart.
   - Data functions are the gateway to the persistence layer. All SQL/DB code is in these functions.
   - Prefer the following top-down order for exported functions: `read, create, update, delete`.
   - Data entities' shapes are defined here. E.G. `UserEntity`, `CarEntity`, `CustomerEntity`.
