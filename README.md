@@ -3069,6 +3069,59 @@ Array.prototype.sum = () => {};
 
 ### General
 
+#### A `surface` is a folder for a client and/or the server.
+
+```
+/clients
+  /app # surface
+  /website # surface
+/server/ # surface
+```
+
+#### Client surfaces are placed within a '/clients' folder and the server surface is placed in the `/server` folder.
+
+```
+/clients
+/server
+```
+
+#### Code common to surfaces is placed in a shared `/common` folder placed within the closest parent folder.
+
+```
+/clients
+  /app
+  /website
+  /common # shared between the app & website surface
+/server/
+/common/ # shared between the clients and server surfaces
+```
+
+#### The top-level folders of each surface are technical categories.
+
+Sub-folders within each technical category folder can be created to serve path normalization.
+
+```
+/clients
+  /app
+    /technical categories
+  /website
+    /technical categories
+  /common
+    /technical categories
+/server/
+  /technical categories
+/common/
+  /technical categories
+```
+
+#### All project code that is destined for compilation/transpilation should go in a `src` folder.
+
+```
+/clients
+  / app
+    /src
+```
+
 #### Services are modules that provide interaction with business data and logic.
 
 They focus on encapsulating specific functionality or business logic, often related to external interactions. Often, they provide functionality that is used by managers or components but do not directly manage the application state themselves.
@@ -3110,21 +3163,25 @@ In other words, for top-level project folders, prefer to keep files together bas
 > Why? Because developers tend to think in terms of technical categories when organizing project files.
 
 ```
+
 # discouraged
+
 /api
-  /api-routes.js
+/api-routes.js
 /products
-  /products-routes.js
+/products-routes.js
 /user
-  /user-routes.js
+/user-routes.js
 
 # preferred
+
 /routes
-  /routes-api.js
+/routes-api.js
 /schema
-  /schema-api.js
+/schema-api.js
 /testing
-  /testing-api.js
+/testing-api.js
+
 ```
 
 #### Within a technical-category folder, at one's discretion, domain-specific files can be placed in domain-specific folders.
@@ -3134,17 +3191,21 @@ If there is only one domain, then adding domain folders is not necessary. Nestin
 > What is domain specific? Files that relate to a particular aspect of the business logic of your application. For example, the routes for the API of your application pertain to the domain of the API within the technical category of routing.
 
 ```
+
 # discouraged
+
 /routes
-  /routes-api.js
-  /routes-public-web.js
+/routes-api.js
+/routes-public-web.js
 
 # preferred
+
 /routes
-  /api
-    /routes-api.js
-  /public-web
-    /routes-public.js
+/api
+/routes-api.js
+/public-web
+/routes-public.js
+
 ```
 
 #### Within domain-specific folders, files that fall within a generalized technical category can go into a separate folder.
@@ -3152,31 +3213,36 @@ If there is only one domain, then adding domain folders is not necessary. Nestin
 Folders for such technical categories are utils, validators, types, cache, etc.
 
 ```
+
 # discouraged
+
 /routes
-  /routes-utils.js
+/routes-utils.js
 /routes
-  /api
-    /routes/api/routes-api-utils.js
+/api
+/routes/api/routes-api-utils.js
 
 # preferred
+
 /routes
-  /routes
-    /utils
-      /routes-utils.js
 /routes
-  /api
-    /utils
-      /routes-api-utils.js
+/utils
+/routes-utils.js
+/routes
+/api
+/utils
+/routes-api-utils.js
 
 # shared files
+
 /routes/
-  /utils
-    /routes-utils.js
+/utils
+/routes-utils.js
 /routes
-  /api
-    /utils
-      /routes-api-utils.js
+/api
+/utils
+/routes-api-utils.js
+
 ```
 
 #### Common Project Folders:
