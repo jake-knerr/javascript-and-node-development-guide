@@ -1,8 +1,8 @@
 # JavaScript and Node Development Guide <!-- omit in toc -->
 
-Welcome to my JavaScript Style Guide. This guide aims to be a comprehensive description of my standards for JavaScript source code.
+Welcome to my JavaScript/Node development guide.
 
-Although this guide is called a style guide, it focuses on more than simply aesthetic issues like formatting. It also provides design guidance — styling with a purpose.
+This guide aims to be a comprehensive style and architectural guide.
 
 ---
 
@@ -66,6 +66,7 @@ Jake Knerr © Ardisia Labs LLC
 - [Globalization](#globalization)
 - [Programming Paradigms](#programming-paradigms)
 - [Abstraction Concepts](#abstraction-concepts)
+- [Decision Minimization Workflow](#decision-minimization-workflow)
 - [Resources](#resources)
 - [Epilogue](#epilogue)
 
@@ -1910,21 +1911,7 @@ foo.apply(null, arr);
 foo(...arr);
 ```
 
-#### When a function has 4 or more required parameters, prefer consolidating all required parameters into a single object.
-
-> Why? This makes it easier to refactor functions and accommodate change.
-
-```javascript
-// discouraged
-function foo(a, b, c, d) {}
-
-// preferred
-function foo({ a, b, c, d }) {}
-```
-
 #### Prefer to place optional parameters after required parameters in the function signature.
-
-Prefer to not mix required and optional properties.
 
 > Why? These conventions make it clear to readers what parameters are optional and which are not. Placing optional parameters at the end of the function signature is the standard convention most developers know and expect, and by supplying optional parameters with values, it is even more apparent which parameters are optional and which are not.
 
@@ -1936,22 +1923,32 @@ function foo(bar = 10, car, goo) {}
 function foo(goo, bar = 10, car = "") {}
 ```
 
+#### When a function has 4 or more parameters, prefer consolidating all parameters into a single object.
+
+This includes both required and optional properties as a unit.
+
+> Why? This makes it easier to refactor functions and accommodate change.
+
+```javascript
+// discouraged
+function foo(a, b, c, d = 10) {}
+
+// preferred - 4 arguments
+function foo({ a, b, c, d = 10 } = {}) {}
+```
+
 #### If there is more than a single optional parameter, prefer consolidating the optional parameters into a single destructured object.
 
 > Why? Otherwise, when calling the function, some optional parameters may have to have dummy values passed to them.
 
 ```javascript
-// discouraged
-function foo(reqA, reqB, optA, optB, optC) {}
+// avoid
+function foo(reqA, optA, optB) {}
+foo(1, null, 3);
 
-// call only wants to pass optC; required to pass dummy values to earlier
-// parameters
-foo(1, 2, null, null, 3);
-
-// preferred
-function foo(reqA, reqB, { optA, optB, optC } = {}) {}
-
-foo(1, 2, { optC: 3 });
+// good
+function foo(reqA, { optA, optB } = {}) {}
+foo(1, { optC: 3 });
 ```
 
 #### For functions where the number of arguments may change in the future, or when required versus optional arguments varies, prefer a single object parameter.
@@ -3194,14 +3191,12 @@ Folders for such technical categories are utils, validators, types, cache, etc.
 #### Common Project Folders:
 
 - `/client` - the client application.
-  - `/src`
-    - `/assets` - Static assets.
-    - `/managers/`
-    - `/services`
-    - `/utils`
-    - `/views` - View components.
-    - `bootstrap.js` - Entry point for the client application.
+  - `/assets` - Static assets.
+  - `/services` - Architectural services and data services - anything related to business logic or shared application state.
+  - `/utils`
+  - `/views` - View components.
   - `/types`
+  - `bootstrap.js` - Entry point for the client application.
 - `/controllers` - Functions that can accept `req`, `res`,and `next` objects.
   - Prefer thin controllers and put business logic in the services.
   - HTTP request handlers should just concern themselves with HTTP and data shape validation.
@@ -4064,6 +4059,10 @@ const floatNum = 10.5;
 **[⬆ Table of Contents](#toc)**
 
 ---
+
+## Decision Minimization Workflow
+
+Prefer systems that minimize the number of decisions required.
 
 ## Resources
 
