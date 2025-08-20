@@ -1,4 +1,4 @@
-# JavaScript Style Guide <!-- omit in toc -->
+# JavaScript and Node Development and Style Guide <!-- omit in toc -->
 
 Welcome to my JavaScript Style Guide. This guide aims to be a comprehensive description of my standards for JavaScript source code.
 
