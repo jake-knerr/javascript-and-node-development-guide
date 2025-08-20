@@ -56,7 +56,7 @@ Jake Knerr © Ardisia Labs LLC
   - [Module Concepts](#module-concepts)
   - [Restricted JavaScript Features](#restricted-javascript-features)
 - [Application Architecture](#application-architecture)
-  - [General](#general)
+  - [Project Folder Structure](#project-folder-structure)
 - [Minification](#minification)
 - [Comments and Documentation](#comments-and-documentation)
   - [Commenting Overview](#commenting-overview)
@@ -66,7 +66,7 @@ Jake Knerr © Ardisia Labs LLC
 - [Globalization](#globalization)
 - [Programming Paradigms](#programming-paradigms)
 - [Abstraction Concepts](#abstraction-concepts)
-- [Decision Minimization Workflow](#decision-minimization-workflow)
+- [Decision Minimization Workflow (DMW)](#decision-minimization-workflow-dmw)
 - [Resources](#resources)
 - [Epilogue](#epilogue)
 
@@ -3067,7 +3067,7 @@ Array.prototype.sum = () => {};
 
 ## Application Architecture
 
-### General
+### Project Folder Structure
 
 #### A `surface` is a folder for a client and/or the server.
 
@@ -3098,6 +3098,10 @@ Array.prototype.sum = () => {};
 
 #### The top-level folders of each surface are technical categories.
 
+In other words, prefer to keep files together based on what type of architectural role they satisfy. These folders are known as "technical-category folders."
+
+> Why? Because developers tend to think in terms of technical categories when organizing project files.
+
 Sub-folders within each technical category folder can be created to serve path normalization.
 
 ```
@@ -3114,182 +3118,46 @@ Sub-folders within each technical category folder can be created to serve path n
   /technical categories
 ```
 
-#### All project code that is destined for compilation/transpilation should go in a `src` folder.
+#### Common Technical Categories and sub-folders:
 
-```
-/clients
-  / app
-    /src
-```
-
-#### Services are modules that provide interaction with business data and logic.
-
-They focus on encapsulating specific functionality or business logic, often related to external interactions. Often, they provide functionality that is used by managers or components but do not directly manage the application state themselves.
-
-They are not directly related to the application architecture and state management.
-
-#### Managers are modules that focus on managing the state and coordination within the application. They often deal with how data is stored and shared among components.
-
-Typically, they interact more directly with the application’s state and components. They might trigger updates or handle events that affect the state and aim to organize and control the flow of data and events within the application.
-
-In other words, managers are related to the application architecture and state management more than the business data and logic.
-
-Managers are typically more of a client-side concern, used by the components.
-
-#### Components are modules that are responsible for rendering the UI and handling user interactions.
-
-Components are often view code along with controllers that interact with the managers and services.
-
-#### Utilities are exported pure (or purish...) functions and classes that are not specific to your application's business logic.
-
-The utilities folder should be a toolbox that you can ideally lift and put in another project with minimal effort.
-
-#### Helpers are modules that export functionality that is intended to be used in another module.
-
-Helpers are a way to pull out code from a module to make it smaller and more readable. They are created with a clear idea of where they will be used
-
-Keep helper modules close to the modules that they are used within. Typically, they are stored inside a sub-folder of the folder containing the consumer module.
-
-They do not need to have the `helper` suffix in their name.
-
-#### In your project directory structure, prefer to place modules close to the modules that consume them.
-
-> Why? This way, related modules/files will be close to one-another and easily accessible in the file tree.
-
-#### For top-level folders, prefer to co-locate modules by technical category rather than functionality (what they do).
-
-In other words, for top-level project folders, prefer to keep files together based on what type of architectural role they satisfy. These folders are known as "technical-category folders."
-
-> Why? Because developers tend to think in terms of technical categories when organizing project files.
-
-```
-
-# discouraged
-
-/api
-/api-routes.js
-/products
-/products-routes.js
-/user
-/user-routes.js
-
-# preferred
-
-/routes
-/routes-api.js
-/schema
-/schema-api.js
-/testing
-/testing-api.js
-
-```
-
-#### Within a technical-category folder, at one's discretion, domain-specific files can be placed in domain-specific folders.
-
-If there is only one domain, then adding domain folders is not necessary. Nesting sub-domain folders within domain folders is allowed. These folders are known as "domain-specific folders."
-
-> What is domain specific? Files that relate to a particular aspect of the business logic of your application. For example, the routes for the API of your application pertain to the domain of the API within the technical category of routing.
-
-```
-
-# discouraged
-
-/routes
-/routes-api.js
-/routes-public-web.js
-
-# preferred
-
-/routes
-/api
-/routes-api.js
-/public-web
-/routes-public.js
-
-```
-
-#### Within domain-specific folders, files that fall within a generalized technical category can go into a separate folder.
-
-Folders for such technical categories are utils, validators, types, cache, etc.
-
-```
-
-# discouraged
-
-/routes
-/routes-utils.js
-/routes
-/api
-/routes/api/routes-api-utils.js
-
-# preferred
-
-/routes
-/routes
-/utils
-/routes-utils.js
-/routes
-/api
-/utils
-/routes-api-utils.js
-
-# shared files
-
-/routes/
-/utils
-/routes-utils.js
-/routes
-/api
-/utils
-/routes-api-utils.js
-
-```
-
-#### Common Project Folders:
-
-- `/client` - the client application.
-  - `/assets` - Static assets.
-  - `/services` - Architectural services and data services - anything related to business logic or shared application state.
-  - `/utils`
-  - `/views` - View components.
-  - `/types`
-  - `bootstrap.js` - Entry point for the client application.
-- `/controllers` - Functions that can accept `req`, `res`,and `next` objects.
+- /assets
+- /controllers
+  - Functions that can accept `req`, `res`,and `next` objects.
   - Prefer thin controllers and put business logic in the services.
   - HTTP request handlers should just concern themselves with HTTP and data shape validation.
   - Responses prefer a JSON response with the following signature: `{ok: boolean, error: string|string[]}`;
   - Exported functions use `processXXX` as a naming scheme.
   - Controllers can be merged into routes if they are only used in a single route.
-  - `/controllers//validators` - Validators are are a type of controller middleware that are used to validate and sanitize data before it gets to the services.
+  - `/controllers/validators` - Validators are are a type of controller middleware that are used to validate and sanitize data before it gets to the services.
     - All exported functions use `validateXXX` as a naming scheme.
     - They validate the shape of data so typically there are no hits to the database or services.
     - For errors, either throw `400`|`500` for tampering, or errors in an array on the `Request` object for handling by other controllers.
-- `/data` - All exported functions use simple CRUD prefix names like `readData`, `updateData`, etc. Data functions are "dumb". The services are smart.
+- /data - All exported functions use simple CRUD prefix names like `readData`, `updateData`, etc. Data functions are "dumb". The services are smart.
   - Data functions are the gateway to the persistence layer. All SQL/DB code is in these functions.
   - Prefer the following top-down order for exported functions: `read, create, update, delete`.
   - Data entities' shapes are defined here. E.G. `UserEntity`, `CarEntity`, `CustomerEntity`.
-- `/lib` - Third-party libraries that are not available on npm.
-- `/logs`
-- `/public` - Publicly available static assets.
-- `/routes` - Post requests should use CRUD prefixes in the url. E.G. `/create-topic`
-  - Order routes by `read`, `create`, `update`, `delete`.
-- `/scripts` - scripts that are used to build, test, deploy, or run tasks for the application.
-  - `/scripts/build`
-  - `/scripts/test`
-  - `/scripts/tasks`
-- `/scratch` - Random thoughts, files, mockups.
-- `/scripts`
-  - `/build` - Build scripts.
-  - `/tasks` - Scripts run at specified intervals.
-- `/services` - The business logic of the application. They are the gateway to the data model. Services are "smart" and data models are "dumb", and they provide the data to the controllers.
+- /enums
+- /lib - Third-party libraries that are not available on npm.
+- /logs
+- /public
+- /routers
+- /scripts - scripts that are used to build, test, deploy, or run tasks for the application.
+- /services
+  - The business logic of the application. They are the gateway to the data model. Services are "smart" and data models are "dumb", and they provide the data to the controllers.
   - When deciding which service a function belongs to, consider the data. What data is being mutated, created, or read? What service does this data fit into the best?
-  - Prefer CRUD functions using the following prefixes: `get`, `add`, `set`, `remove`, defined in this top-down order.
-- `/testing`
-- `/types` - shared type definitions, enums, and JSDoc definitions that do not fit cleanly into a feature folder.
-  - Only typescript definitions, JSDoc, or enums go in this folder.
-- `/utils` - shared utils.
-- `/views` - Templates and static view files.
-- `server.js` - Entry point for the server application.
+  - Prefer CRUD functions using the following prefixes: `get`, `add`, `set`, `remove`, defined in this same top-down order.
+- /static
+- /styles
+- /src
+  - Files that are destined for compilation/transpilation.
+- /templates
+- /testing
+- /types
+- /utils
+  - Pure (purish...) functions and classes that are not specific to your application's business logic.
+  - The utilities folder should be a toolbox that you can ideally lift and put in another project with minimal effort.
+- /views
+- /workers
 
 #### Prefer a Layer Based Architecture.
 
@@ -3298,12 +3166,6 @@ Bootstrap -> routes -> controllers -> service -> model -> data
 A lower layer does not call a higher layer.
 
 > Why can't a lower layer call a higher layer? This creates circular dependencies.
-
-#### When a JSDoc type is used in more than one file, define such types globally in a file with only JSDoc definitions.
-
-Such files should have the postfix "-type" in the file name.
-
-If a type is used only in a single file, it is acceptable to define it locally with source code.
 
 #### Map database schema to types defined in JSDoc. Such types are "Entity" types.
 
@@ -3335,28 +3197,6 @@ If an index is placed on more than 1 column, place the property's position in th
  * @prop {string} username FK fk_identity 1
  * @prop {string} email FK fk_identity 2
  */
-```
-
-#### Global JSDoc types files should include "-type" as a postfix to the file name.
-
-```
-// avoid
-data-things.js
-
-// good
-data-things-types.js
-```
-
-#### For files that only export enums, name such files with a "-enums" postfix.
-
-> Why? This makes the purpose of such files clear.
-
-```
-// avoid
-data-enum-types.js
-
-// good
-data-enums.js
 ```
 
 **[⬆ Table of Contents](#toc)**
@@ -4117,9 +3957,11 @@ const floatNum = 10.5;
 
 ---
 
-## Decision Minimization Workflow
+## Decision Minimization Workflow (DMW)
 
 Prefer systems that minimize the number of decisions required.
+
+This concept is known as decision minimization workflow.
 
 ## Resources
 
