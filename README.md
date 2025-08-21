@@ -3076,7 +3076,7 @@ Array.prototype.sum = () => {};
 
 ### Project Folder Structure
 
-#### A `surface` is a folder for a client and/or the server.
+#### A `surface` is a folder for a client and the server.
 
 ```
 /clients
@@ -3098,14 +3098,14 @@ Array.prototype.sum = () => {};
 /clients
   /app
   /website
-  /common # shared between the app & website surface
+  /common # shared between the client surfaces
 /server/
 /common/ # shared between the clients and server surfaces
 ```
 
 #### The top-level folders of each surface are technical categories.
 
-In other words, prefer to keep files together based on what type of architectural role they satisfy. These folders are known as "technical-category folders."
+In other words, prefer to keep files together based on what type of architectural role they satisfy at the top-level. These folders are known as "technical-category folders."
 
 > Why? Because developers tend to think in terms of technical categories when organizing project files.
 
@@ -3125,7 +3125,7 @@ Sub-folders within each technical category folder can be created to serve path n
   /technical categories
 ```
 
-#### Common Technical Categories and sub-folders:
+#### Common technical categories and sub-folders:
 
 - /assets
 - /controllers
