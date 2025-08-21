@@ -510,21 +510,13 @@ utils/math/math-utils.js;
 
 #### A file's purpose should be described by its parent folder(s), the file name, and the file extension.
 
-Put related files in folders to shorten their file names because they share the context provided by the parent folder. Thus, reducing the overall number of characters used to describe the paths of the files.
-
-This is path normalization.
-
 > Why? A reader should not have to open the file to determine its purpose.
 
 ```
-/* discouraged */
-/home-page.ejs
-/contact-page.ejs
-
-/* preferred */
-/pages
-  /home.ejs
-  /contact.ejs
+/* good */
+/website
+  /pages
+    /contact.html
 
 /* avoid - ejs files are templates */
 profile-template.ejs
@@ -533,7 +525,22 @@ profile-template.ejs
 profile.ejs
 ```
 
-#### Prefer folder names that minimize the total path length for all of the files. This should help decide what folders to create.
+#### Put related files in folders to shorten their file names because they share the context provided by the parent folder. Thus, reducing the overall number of characters used to describe the paths of the files.
+
+This is path normalization.
+
+```
+/* discouraged */
+/home-page.ejs
+/contact-page.ejs
+
+/* preferred - less characters in the paths overall */
+/pages
+  /home.ejs
+  /contact.ejs
+```
+
+#### Prefer folder names that minimize the total path length for all of the contained files. This should help decide what folders to create and their names.
 
 Basically, prefer efficient folder names.
 
@@ -551,7 +558,7 @@ Basically, prefer efficient folder names.
 
 #### Single file folders are allowed.
 
-Alternatively, having a longer filename is fine instead of a single folder file..
+Alternatively, having a longer filename is also acceptable instead of a single file folder.
 
 > Why use a single file folder? Perhaps you expect to add more files in the future or a folder is consistent with the structure of the parent folder.
 
