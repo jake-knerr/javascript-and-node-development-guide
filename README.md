@@ -1086,7 +1086,7 @@ let foo = bar === 1 ? goo : car;
 
 #### For conditional statements like `if` comparisons, prefer using shortcut "truthy" checks over explicit comparisons when applicable.
 
-> Why? Truthy checks are concise and consistent. Learning the rules of type coercion to boolean values requires some effort, but it is worthwhile. Especially since it prevents one from being shocked when reading the abundant code out in the wild that uses truthy checks.
+> Why? Truthy checks are concise and consistent. Learning the rules of type coercion to boolean values requires some effort, but it is worthwhile. Especially since it prevents one from being confused when reading the abundant code out in the wild that uses truthy checks.
 
 ```javascript
 // discouraged
@@ -1917,7 +1917,7 @@ function foo(goo, bar = 10, car = "") {}
 
 #### When a function has 4 or more parameters, prefer consolidating all parameters into a single object.
 
-This includes both required and optional properties as a unit.
+This 4 count includes both required and optional properties.
 
 > Why? This makes it easier to refactor functions and accommodate change.
 
@@ -1968,7 +1968,7 @@ function foo(bar = val) {}
 foo(++val);
 ```
 
-#### When using rest syntax in a destructuring assignment for arguments, prefer to name the rest properties "props" for required properties and "optionalProps" for optional rest properties.
+#### When using rest syntax in a destructuring assignment for arguments, prefer to name the rest properties "props" for required properties and "optProps" for optional rest properties.
 
 > Why? This convention is clear and frees the developer from having to invent a name.
 
@@ -1977,7 +1977,7 @@ foo(++val);
 function({ a, b, c, ...args }, { optA, optB, ...options }) {}
 
 // preferred
-function({ a, b, c, ...props }, { optA, optB, ...optionalProps }) {}
+function({ a, b, c, ...props }, { optA, optB, ...optProps }) {}
 ```
 
 #### For objects with required object parameters, prefer to define the required props before the optional properties in the function signature.
@@ -2003,7 +2003,7 @@ Use an optional parameter instead or change the order of the required parameters
 function foo(a, b, c) {}
 foo(undefined, 1, 2);
 
-// prefer
+// good
 function foo(b, c, a) {}
 foo(1, 2);
 ```
@@ -2211,7 +2211,7 @@ function* genFunction(start = 0, end = 100, step = 1) {
 
 #### Use the `class` syntax over other class (prototype) techniques.
 
-This includes using `extends` for prototypal inheritance.
+This prescription includes using `extends` for prototypal inheritance.
 
 > Why? `class` syntax is clear and easy to understand. Also, since it is the new standard, it is better understood by other developers than ad-hoc techniques.
 
@@ -2663,16 +2663,16 @@ export default class createBtnComponent() {}
 
 ### Module Imports
 
-#### Exclude the file extension in import paths when permissible.
+#### Include the file extension in import paths.
 
-> Why? This convention promotes consistency and allows for future typescript support. It is also more concise.
+> Why? This convention promotes consistency and prevents transpilation issues.
 
 ```javascript
 // avoid
-import "./code.js";
+import "./code";
 
 // good
-import "./code";
+import "./code.js";
 ```
 
 #### Imports go above other code in the module.
@@ -2864,7 +2864,7 @@ export function bar() {}
 
 #### Circular dependencies between modules are discouraged.
 
-If circular dependencies are necessary, leave an explanatory comment. Use with caution.
+If circular dependencies are necessary, use with caution.
 
 > Why? Circular dependencies are simply confusing and increase coupling between modules.
 
